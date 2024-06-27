@@ -12,13 +12,14 @@ const paginationReducer = createSlice({
       state.page = action.payload;
     },
     handlePageSize(state, action) {
+      console.log(action.payload);
       state.limit = action.payload;
     },
     handleSearchTerm(state, action) {
       state.search = action.payload;
     },
     handlePagination(state, action) {
-      state.totalItems = action.payload.totalItems;
+      state.allDataCount = action.payload.allDataCount;
       state.limit = action.payload.limit;
       state.page = action.payload.page;
       state.totalPage = action.payload.totalPage;

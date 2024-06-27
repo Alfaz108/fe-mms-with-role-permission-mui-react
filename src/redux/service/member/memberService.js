@@ -3,11 +3,11 @@ import { apiService } from "../../api/apiService";
 export const memberService = apiService.injectEndpoints({
   endpoints: (builder) => ({
     memberList: builder.query({
-      query: () => ({
-        url: `member`,
+      query: (url) => ({
+        url: `/member${url}`,
         method: "GET",
       }),
-      transformResponse: (data) => data || [],
+      transformResponse: ({ data }) => data || [],
     }),
 
     memberCreate: builder.mutation({

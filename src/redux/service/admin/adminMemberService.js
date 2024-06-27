@@ -1,8 +1,8 @@
 import { apiService } from "../../api/apiService";
 
-export const memberService = apiService.injectEndpoints({
+export const adminMemberService = apiService.injectEndpoints({
   endpoints: (builder) => ({
-    memberList: builder.query({
+    adminMemberList: builder.query({
       query: () => ({
         url: `user`,
         method: "GET",
@@ -12,4 +12,4 @@ export const memberService = apiService.injectEndpoints({
   }),
 });
 
-export const { useMemberListQuery } = memberService;
+export const { useAdminMemberListQuery } = adminMemberService;

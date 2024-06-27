@@ -9,14 +9,13 @@ import {
   Card,
   CardContent,
 } from "@mui/material";
+import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 
-const PermissionDenied = () => {
+const PageNotFound = () => {
   const currentUser = useSelector((state) => state.auth.currentUser);
   const navigate = useNavigate();
 
   const routerError = useRouteError();
-
-  console.log("routerError", routerError);
 
   const handleBackToHome = () => {
     navigate("/");
@@ -30,28 +29,38 @@ const PermissionDenied = () => {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: "#f8f9fa",
+        backgroundColor: "#f0f2f5",
       }}
     >
       <Card
         sx={{
-          maxWidth: 500,
+          maxWidth: 600,
           textAlign: "center",
-          padding: 3,
+          padding: 4,
+          boxShadow: 3,
+          borderRadius: 2,
         }}
       >
         <CardContent>
+          <Box display="flex" justifyContent="center" mb={2}>
+            <ErrorOutlineIcon color="error" style={{ fontSize: 50 }} />
+          </Box>
           <Typography variant="h4" component="h1" gutterBottom color="error">
-            Access Denied
+            404
+          </Typography>
+          <Typography variant="h6" component="h2" gutterBottom>
+            PAGE NOT FOUND
           </Typography>
           <Typography variant="body1" paragraph>
-            Sorry, {currentUser?.name || "Guest"}, you do not have permission to
-            view this page.
+            OIt's looking like you may have taken a wrong turn. Don't worry...
+            it happens to the best of us. Here's a little tip that might help
+            you get back on track.
           </Typography>
           <Button
             variant="contained"
             color="primary"
             onClick={handleBackToHome}
+            sx={{ mt: 2 }}
           >
             Back to Home
           </Button>
@@ -61,4 +70,4 @@ const PermissionDenied = () => {
   );
 };
 
-export default PermissionDenied;
+export default PageNotFound;

@@ -11,7 +11,7 @@ import CustomTable from "../../../../components/app/table";
 import DateFormatter from "../../../../utils/date-time/DateFormatter";
 
 //@ rtk api services & features
-import { useMemberListQuery } from "../../../../redux/service/admin/memberService";
+import { useAdminMemberListQuery } from "../../../../redux/service/admin/adminMemberService";
 import MemberCreateUpdate from "./MemberCreateUpdate";
 
 //@ assign default value
@@ -28,14 +28,14 @@ const DEFAULT_MEMBER_VALUES = {
 };
 
 //@ main component
-const Member = () => {
+const AdminMember = () => {
   /**
    * react local state
    */
   const [modal, setModal] = useState(false);
   const [defaultValues, setDefaultValues] = useState(DEFAULT_MEMBER_VALUES);
 
-  const { data: memberList, isLoading, isError } = useMemberListQuery();
+  const { data: memberList, isLoading, isError } = useAdminMemberListQuery();
 
   const renderTableData = useMemo(
     () => memberList?.data || [],
@@ -122,4 +122,4 @@ const Member = () => {
   }
 };
 
-export default Member;
+export default AdminMember;

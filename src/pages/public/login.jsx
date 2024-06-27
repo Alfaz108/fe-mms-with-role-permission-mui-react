@@ -1,6 +1,13 @@
 import React, { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { Card, Box, Typography, Button, Grid } from "@mui/material";
+import {
+  Card,
+  Box,
+  Typography,
+  Button,
+  Grid,
+  CircularProgress,
+} from "@mui/material";
 import CustomFormComponent from "../../components/app/from/CustomFromComponent";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -125,7 +132,13 @@ const Login = () => {
                       }}
                       type="submit"
                     >
-                      Login
+                      Login &nbsp;
+                      {isLoading && (
+                        <CircularProgress
+                          size={20}
+                          style={{ color: "#ffff" }}
+                        />
+                      )}
                     </Button>
                   </Grid>
                 </Grid>

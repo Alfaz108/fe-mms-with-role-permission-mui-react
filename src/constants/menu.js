@@ -9,7 +9,11 @@ const MENU_ITEMS = () => {
       label: "Dashboard",
       icon: DashboardIcon,
       url: "/",
-      role: [PermissionEnum.ADMIN, PermissionEnum.MANAGER],
+      role: [
+        PermissionEnum.ADMIN,
+        PermissionEnum.MANAGER,
+        PermissionEnum.MEMBER,
+      ],
     },
     {
       key: "admin-member",
@@ -17,6 +21,13 @@ const MENU_ITEMS = () => {
       icon: SupervisorAccountIcon,
       url: "/admin/member",
       role: [PermissionEnum.ADMIN],
+    },
+    {
+      key: "member",
+      label: "Member",
+      icon: SupervisorAccountIcon,
+      url: "/member",
+      role: [PermissionEnum.MANAGER, PermissionEnum.MEMBER],
     },
     {
       key: "menu",

@@ -18,7 +18,7 @@ import MoreIcon from "@mui/icons-material/MoreVert";
 import LogoutIcon from "@mui/icons-material/Logout";
 import PersonIcon from "@mui/icons-material/Person";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { userLogout } from "../redux/features/authReducer";
 
 const drawerWidth = 240;
@@ -116,6 +116,8 @@ const Navbar = ({ open, setOpen }) => {
     navigate("/auth/login");
     dispatch(userLogout());
   };
+
+  const currentUser = useSelector((state) => state.auth.currentUser);
 
   const menuId = "primary-search-account-menu";
   const renderMenu = (
@@ -231,7 +233,15 @@ const Navbar = ({ open, setOpen }) => {
                 onClick={handleProfileMenuOpen}
                 color="inherit"
               >
-                <AccountCircle />
+                <AccountCircle sx={{ fontSize: 40 }} />
+                <Box align="left" marginLeft={1} fontWeight="bold">
+                  <Typography sx={{ fontSize: 16 }}>
+                    {currentUser?.name}
+                  </Typography>
+                  <Typography sx={{ fontSize: 10 }}>
+                    {currentUser?.role}
+                  </Typography>
+                </Box>
               </IconButton>
             </Box>
             <Box sx={{ display: { xs: "flex", md: "none" } }}>

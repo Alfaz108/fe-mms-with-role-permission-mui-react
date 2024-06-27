@@ -1,277 +1,67 @@
-import classNames from "classnames";
-import React, { useCallback, useEffect, useState } from "react";
-
-import { useDispatch, useSelector } from "react-redux";
-import debounce from "../../../helpers/debounce";
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { TablePagination } from "@mui/material";
+import { defaultConfig } from "antd/es/theme/context";
+import debounce from "../../..//helpers/debounce";
 import {
   handleChangePage,
   handlePageSize,
+  handlePagination,
 } from "../../../redux/features/paginationReducer";
-import { defaultConfig } from "antd/es/theme/context";
 
-const Pagination = ({ sizePerPageList }) => {
-  /**
-   * rtk query services & redux reducers
-   */
+const Pagination = ({ paginationInfo }) => {
   const dispatch = useDispatch();
+
   const {
     totalPage,
     page: pageCount,
     limit: limitCount,
   } = useSelector((state) => state.pagination);
 
-  /**
-   * react local state
-   */
+  const [page, setPage] = React.useState(pageCount);
+  const [limit, setLimit] = React.useState(limitCount);
 
-  // const [totalPage, setTotalPage] = useState(totalPageCount);
-  const [page, setPage] = useState(pageCount);
-  const [limit, setLimit] = useState(limitCount);
-
-  /**
-   * custom handler
-   */
-
-  /**
-   * get filter pages
-   */
-  const filterPages = useCallback(
-    (visiblePages) => {
-      return visiblePages.filter((page) => page <= totalPage);
-    },
-    [totalPage]
-  );
-
-  /**
-   * handle visible pages
-   */
-  const getVisiblePages = useCallback(
-    (page, total) => {
-      if (total < 7) {
-        return filterPages([1, 2, 3, 4, 5, 6], total);
-      } else {
-        if (page % 5 >= 0 && page > 4 && page + 2 < total) {
-          return [1, page - 1, page, page + 1, total];
-        } else if (page % 5 >= 0 && page > 4 && page + 2 >= total) {
-          return [1, total - 3, total - 2, total - 1, total];
-        } else {
-          return [1, 2, 3, 4, 5, total];
-        }
-      }
-    },
-    [filterPages]
-  );
-
-  /**
-   * custom delay
-   */
-  const delayedPageSize = useCallback(
+  const delayedPageSize = React.useCallback(
     debounce((pageSize) => {
       dispatch(handlePageSize(Number(pageSize)));
     }, defaultConfig.delay),
     []
   );
 
-  const delayedPageChange = useCallback(
+  const delayedPageChange = React.useCallback(
     debounce((page) => {
       dispatch(handleChangePage(Number(page)));
     }, defaultConfig.delay),
     []
   );
+  const handleChangeNewPage = (event, newPage) => {
+    setPage(Number(newPage) + 1);
+    delayedPageChange(Number(newPage) + 1);
+  };
 
-  /**
-   * handle page change
-   * @param curPage - current page
-   * @returns
-   */
-  const changePage = (curPage) => {
-    if (curPage > totalPage) {
-      return;
-    }
-
-    const visiblePages = getVisiblePages(curPage, totalPage);
-    setVisiblePages(filterPages(visiblePages, totalPage));
-
-    setPage(curPage);
-    delayedPageChange(curPage);
+  const handleChangeRowsPerPage = (event) => {
+    setPage(1);
+    setLimit(+event.target.value);
+    delayedPageSize(+event.target.value);
+    delayedPageChange(1);
   };
 
   useEffect(() => {
-    const visiblePages = getVisiblePages(0, totalPage);
-    setVisiblePages(visiblePages);
-  }, [totalPage, getVisiblePages]);
-
-  const [visiblePages, setVisiblePages] = useState(
-    getVisiblePages(0, totalPage)
-  );
-  const activePage = page;
+    if (paginationInfo && Object.keys(paginationInfo).length > 0) {
+      dispatch(handlePagination(paginationInfo));
+    }
+  }, [paginationInfo]);
 
   return (
-    <div className="d-lg-flex align-items-center text-center pb-1">
-      {sizePerPageList.length > 0 && (
-        <div className="d-inline-block me-3">
-          <label
-            className="me-1  fw-bold"
-            style={{
-              color: "#343a40",
-            }}
-          >
-            {"Display"} :
-          </label>
-          <select
-            value={limit}
-            onChange={(e) => {
-              setLimit(Number(e.target.value));
-              delayedPageSize(Number(e.target.value));
-              changePage(1);
-            }}
-            className="form-select d-inline-block w-auto"
-          >
-            {(sizePerPageList || []).map((pageSize, index) => {
-              return (
-                <option key={index} value={pageSize.value}>
-                  {pageSize.text}
-                </option>
-              );
-            })}
-          </select>
-        </div>
-      )}
-
-      <span
-        className="me-3 fw-bold"
-        style={{
-          color: "#343a40",
-        }}
-      >
-        {"Page"}{" "}
-        <strong>
-          {page} of {totalPage}
-        </strong>{" "}
-      </span>
-
-      <span className="d-inline-block align-items-center text-sm-start text-center my-sm-0 my-2 fw-bold">
-        <label
-          style={{
-            color: "#343a40",
-          }}
-        >
-          {"Go To Page"} :{" "}
-        </label>
-        <input
-          type="number"
-          value={page}
-          min="1"
-          onChange={(e) => {
-            const page = e.target.value ? Number(e.target.value) : 1;
-            changePage(page);
-          }}
-          className="form-control w-25 ms-1 d-inline-block"
-        />
-      </span>
-
-      <ul className="pagination pagination-rounded d-inline-flex ms-auto align-item-center mb-0">
-        <li
-          key="prevpage"
-          className={classNames("page-item", "paginate_button", "previous", {
-            disabled: activePage === 1,
-          })}
-          onClick={() => {
-            if (activePage === 1) return;
-            changePage(activePage - 1);
-          }}
-        >
-          <a
-            to="#"
-            className="page-link"
-            role="button"
-            style={{
-              color: activePage === page ? "#343a40" : "transparent",
-            }}
-          >
-            <i className="mdi mdi-chevron-left"></i>
-          </a>
-        </li>
-        {(visiblePages || []).map((page, index, array) => {
-          return array[index - 1] + 1 < page ? (
-            <React.Fragment key={page}>
-              <li
-                key={page}
-                className={classNames(
-                  "page-item",
-                  "d-none",
-                  "d-xl-inline-block",
-                  {
-                    active: activePage === page,
-                  }
-                )}
-                onClick={() => changePage(page)}
-              >
-                <a
-                  to="#"
-                  className="page-link"
-                  role="button"
-                  style={{
-                    backgroundColor:
-                      activePage === page ? "#343a40" : "transparent",
-                    color: activePage === page ? "white" : "#343a40",
-                  }}
-                >
-                  {page}
-                </a>
-              </li>
-            </React.Fragment>
-          ) : (
-            <li
-              key={page}
-              className={classNames(
-                "page-item",
-                "d-none",
-                "d-xl-inline-block",
-                {
-                  active: activePage === page,
-                }
-              )}
-              onClick={() => changePage(page)}
-            >
-              <a
-                to="#"
-                className="page-link"
-                role="button"
-                style={{
-                  backgroundColor:
-                    activePage === page ? "#343a40" : "transparent",
-                  color: activePage === page ? "white" : "#343a40",
-                }}
-              >
-                {page}
-              </a>
-            </li>
-          );
-        })}
-        <li
-          key="nextpage"
-          className={classNames("page-item", "paginate_button", "next", {
-            disabled: activePage === totalPage,
-          })}
-          onClick={() => {
-            if (activePage === totalPage) return;
-            changePage(activePage + 1);
-          }}
-        >
-          <a
-            to="#"
-            className="page-link"
-            role="button"
-            style={{
-              color: activePage === page ? "#343a40" : "transparent",
-            }}
-          >
-            <i className="mdi mdi-chevron-right"></i>
-          </a>
-        </li>
-      </ul>
-    </div>
+    <TablePagination
+      rowsPerPageOptions={[5, 10, 25, 50]}
+      component="div"
+      count={totalPage * limit}
+      rowsPerPage={limit}
+      page={page - 1}
+      onPageChange={handleChangeNewPage}
+      onRowsPerPageChange={handleChangeRowsPerPage}
+    />
   );
 };
 

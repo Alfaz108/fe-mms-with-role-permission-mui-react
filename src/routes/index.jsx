@@ -1,10 +1,9 @@
 import { createBrowserRouter } from "react-router-dom";
-import PrivateRoute from "./PrivateRoute";
 import Root from "./Root";
 
 import Login from "../pages/public/login";
 import protectRoutes from "./middleware/ProtectRoute";
-import PermissionDenied from "../components/common/PermissionDenied";
+import PageNotFound from "../components/common/PageNotFound";
 
 export const route = createBrowserRouter([
   {
@@ -19,6 +18,6 @@ export const route = createBrowserRouter([
   },
   {
     path: "not-found",
-    element: <PermissionDenied />,
+    element: <PageNotFound />,
   },
 ]);

@@ -6,6 +6,8 @@ import privateRoutes from "../PrivateRoute";
 
 const ProtectRoute = ({ route, children }) => {
   const currentUser = useSelector((state) => state.auth.currentUser);
+
+  console.log({ currentUser });
   const token = localStorage.getItem("token");
 
   if (!currentUser && !token) {

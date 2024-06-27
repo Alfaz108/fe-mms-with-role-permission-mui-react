@@ -80,7 +80,7 @@ const MemberCreateUpdate = ({ modal, setModal, defaultValues }) => {
    * handle form submission
    */
   const onSubmit = (formData) => {
-    // formData.month = new Date(formData?.month)?.toISOString();
+    formData.month = new Date(formData?.month)?.toISOString();
     formData.depositAmount = 0;
     formData.mealQuantity = 0;
     formData.mealRate = 0;
