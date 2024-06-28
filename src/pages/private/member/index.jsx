@@ -1,31 +1,31 @@
 //@ external lib import
-import React, { useEffect, useMemo, useState } from "react";
-
-//@ MUI lib import
-import { TableCell, Typography } from "@mui/material";
+import React, { useMemo, useState } from "react";
 
 //@ component import
 import CustomTable from "../../../components/app/table";
+import ErrorPage from "../../../components/common/ErrorPage";
+import LoadingData from "../../../components/common/LoadingData";
 
 //@ util function
+import { StatusChangeColor } from "../../../utils/status-change/StatusChangeColor";
+import { getURL } from "../../../helpers/qs";
 
 //@ rtk api services & features
 import { useMemberListQuery } from "../../../redux/service/member/memberService";
-import { StatusChangeColor } from "../../../utils/status-change/StatusChangeColor";
-import LoadingData from "../../../components/common/LoadingData";
-import ErrorPage from "../../../components/common/ErrorPage";
-import { getURL } from "../../../helpers/qs";
-import { useDispatch } from "react-redux";
-import { handlePagination } from "../../../redux/features/paginationReducer";
 
 //@ main component
 const Member = () => {
-  const dispatch = useDispatch();
-
   /**
    * react local state
    */
 
+  const [modal, setModal] = useState(false);
+
+  /**
+   *   rtk mutation & Query
+   */
+
+  //@ member list
   const { memberList, isLoading, pagination, isError } = useMemberListQuery(
     getURL(``),
     {
@@ -41,16 +41,12 @@ const Member = () => {
     }
   );
 
-  // const {
-  //   data: memberList,
-  //   isLoading,
-  //   pagination,
-  //   isError,
-  // } = useMemberListQuery();
-
-  console.log(memberList);
-
-  const renderTableData = useMemo(() => memberList || [], [memberList]);
+  /**
+   * Show the modal
+   */
+  const addShowModal = () => {
+    setModal(true);
+  };
 
   /**
    * table columns
@@ -61,56 +57,56 @@ const Member = () => {
         id: "name",
         label: "Name",
         minWidth: 120,
-        format: (value) => value,
+        format: (value) => (value ? value : "n/a"),
         align: "center",
       },
       {
         id: "mobile",
         label: "Mobile",
         minWidth: 120,
-        format: (value) => value,
+        format: (value) => (value ? value : "n/a"),
         align: "center",
       },
       {
         id: "roomNumber",
         label: "Room Number",
         minWidth: 50,
-        format: (value) => value,
+        format: (value) => (value ? value : "n/a"),
         align: "center",
       },
       {
         id: "depositAmount",
         label: "Deposit Amount",
         minWidth: 50,
-        format: (value) => value,
+        format: (value) => (value ? value : "n/a"),
         align: "center",
       },
       {
         id: "mealQuantity",
         label: "Meal Quantity",
         minWidth: 50,
-        format: (value) => value,
+        format: (value) => (value ? value : "n/a"),
         align: "center",
       },
       {
         id: "mealRate",
         label: "Meal Rate",
         minWidth: 50,
-        format: (value) => value,
+        format: (value) => (value ? value : "n/a"),
         align: "center",
       },
       {
         id: "totalCost",
         label: "Total Cost",
         minWidth: 50,
-        format: (value) => value,
+        format: (value) => (value ? value : "n/a"),
         align: "center",
       },
       {
         id: "summaryAmount",
         label: "Summary Amount",
         minWidth: 50,
-        format: (value) => value,
+        format: (value) => (value ? value : "n/a"),
         align: "center",
       },
       {
@@ -125,12 +121,10 @@ const Member = () => {
   );
 
   /**
-   * Show the modal
+   *   table data render
    */
-  const [modal, setModal] = useState(false);
-  const addShowModal = () => {
-    setModal(true);
-  };
+
+  const renderTableData = useMemo(() => memberList || [], [memberList]);
 
   if (isLoading) {
     return (

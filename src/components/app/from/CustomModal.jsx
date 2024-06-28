@@ -1,5 +1,5 @@
 //@ external lib import
-import React from "react";
+import React, { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
@@ -9,7 +9,15 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import { Button, Grow, IconButton, Typography, Box, Grid } from "@mui/material";
+import {
+  Button,
+  Grow,
+  IconButton,
+  Typography,
+  Box,
+  Grid,
+  CircularProgress,
+} from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 
@@ -17,7 +25,7 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import CustomInputFIelds from "./CustomInputFIelds";
 
 //@ dialog transition
-const Transition = React.forwardRef(function Transition(props, ref) {
+export const Transition = React.forwardRef(function Transition(props, ref) {
   return (
     <Grow
       timeout={{
@@ -36,6 +44,8 @@ const CustomModal = ({
   modal,
   setModal,
   inputFields,
+  isSuccess,
+  isLoading,
   size,
   title,
   addTitle,
@@ -43,6 +53,7 @@ const CustomModal = ({
   schemaResolver,
   onSubmit,
   modalID,
+  emptyDefaultValue,
   column = { xs: 12, sm: 12, md: 6, lg: 6, xl: 3 },
 }) => {
   /**
@@ -54,14 +65,35 @@ const CustomModal = ({
     resolver: yupResolver(schemaResolver),
   });
 
-  const { handleSubmit } = methods;
+  const { handleSubmit, reset } = methods;
 
   /**
    * modal close when click close button
    */
   const handleClose = () => {
     setModal(false);
+    reset(emptyDefaultValue);
   };
+
+  /**
+   * when success api call then modal close and default value reset
+   */
+  useEffect(() => {
+    if (isSuccess) {
+      setModal(false);
+      reset(defaultValues);
+    }
+  }, [isSuccess]);
+
+  /**
+   *  default value reset
+   */
+
+  useEffect(() => {
+    if (defaultValues) {
+      reset(defaultValues);
+    }
+  }, [JSON.stringify(defaultValues)]);
 
   return (
     <FormProvider {...methods}>
@@ -143,6 +175,10 @@ const CustomModal = ({
               type="submit"
             >
               {addTitle}
+
+              {isLoading && (
+                <CircularProgress size={20} style={{ color: "#ffff" }} />
+              )}
             </Button>
           </DialogActions>
         </form>

@@ -8,8 +8,9 @@ import { TableCell } from "@mui/material";
 import CustomTable from "../../../components/app/table";
 import UserCreateUpdate from "./UserCreateUpdate";
 
-//@ util function
+//@ util and helper function
 import DateFormatter from "../../../utils/date-time/DateFormatter";
+import { getURL } from "../../../helpers/qs";
 
 //@ rtk api services & features
 import { useUserListQuery } from "../../../redux/service/user/userService";
@@ -35,9 +36,22 @@ const User = () => {
   const [modal, setModal] = useState(false);
   const [defaultValues, setDefaultValues] = useState(DEFAULT_USER_VALUES);
 
-  const { data: userList, isLoading, isError } = useUserListQuery();
+  const { userList, isLoading, pagination, isError } = useUserListQuery(
+    getURL(``),
+    {
+      selectFromResult: (data) => {
+        console.log(data);
+        return {
+          pagination: data?.data?.pagination,
+          userList: data?.data?.data,
+          isLoading: data?.isLoading,
+          isError: data?.isError,
+        };
+      },
+    }
+  );
 
-  const renderTableData = useMemo(() => userList?.data || [], [userList?.data]);
+  const renderTableData = useMemo(() => userList || [], [userList]);
 
   /**
    * table columns
@@ -72,27 +86,12 @@ const User = () => {
         format: (value) => value,
         align: "center",
       },
-      // {
-      //   id: "status",
-      //   label: "Status",
-      //   minWidth: 170,
-      //   format: (value) => (
-      //     <TableCell
-      //       sx={{
-      //         color: value === "ACTIVE" ? "green" : "red",
-      //       }}
-      //       align="center"
-      //     >
-      //       {value?.toLowerCase()}
-      //     </TableCell>
-      //   ),
-      //   align: "center",
-      // },
+
       {
         id: "createdAt",
         label: "Created Date",
         minWidth: 170,
-        format: (value) => (value ? DateFormatter({ date: value }) : t("n/a")),
+        format: (value) => (value ? DateFormatter({ date: value }) : "n/a"),
         align: "center",
       },
     ],
@@ -120,6 +119,7 @@ const User = () => {
           tableInfo={{
             addTitle: "User",
           }}
+          paginationInfo={pagination}
         />
 
         <UserCreateUpdate

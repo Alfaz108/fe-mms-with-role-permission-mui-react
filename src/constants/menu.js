@@ -2,6 +2,10 @@ import MailIcon from "@mui/icons-material/Mail";
 import SupervisorAccountIcon from "@mui/icons-material/SupervisorAccount";
 import { PermissionEnum } from "./enums/permission.enums";
 import DashboardIcon from "@mui/icons-material/Dashboard";
+import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
+import ShoppingBagSharpIcon from "@mui/icons-material/ShoppingBagSharp";
+import RestaurantIcon from "@mui/icons-material/Restaurant";
+
 const MENU_ITEMS = () => {
   return [
     {
@@ -30,10 +34,24 @@ const MENU_ITEMS = () => {
       role: [PermissionEnum.MANAGER, PermissionEnum.MEMBER],
     },
     {
-      key: "menu",
-      label: "Menu",
-      icon: MailIcon,
-      url: "/menu",
+      key: "deposit",
+      label: "Deposit",
+      icon: MonetizationOnIcon,
+      url: "/deposit",
+      role: [PermissionEnum.MANAGER],
+    },
+    {
+      key: "market",
+      label: "Market",
+      icon: ShoppingBagSharpIcon,
+      url: "/market",
+      role: [PermissionEnum.MANAGER],
+    },
+    {
+      key: "meal",
+      label: "Meal",
+      icon: RestaurantIcon,
+      url: "/meal",
       role: [PermissionEnum.MANAGER],
     },
   ];

@@ -10,7 +10,12 @@ import statusEnums from "../../../../constants/enums/status.enums";
 import { useMemberCreateMutation } from "../../../../redux/service/member/memberService";
 
 //@ main component
-const MemberCreateUpdate = ({ modal, setModal, defaultValues }) => {
+const MemberCreateUpdate = ({
+  modal,
+  setModal,
+  defaultValues,
+  emptyDefaultValue,
+}) => {
   const [memberCreate, { isSuccess, isLoading }] = useMemberCreateMutation();
   /*
    * form validation schema
@@ -22,8 +27,6 @@ const MemberCreateUpdate = ({ modal, setModal, defaultValues }) => {
       roomNumber: yup.string().required("please enter your room number"),
       mobile: yup.string().required("please enter your mobile number"),
       status: yup.string().required(" status is required"),
-
-      month: yup.string().required("date is required"),
     })
     .required();
 
@@ -31,14 +34,6 @@ const MemberCreateUpdate = ({ modal, setModal, defaultValues }) => {
    *  all input data
    */
   const inputFields = [
-    {
-      name: "month",
-      label: "Date",
-      type: "date",
-      placeholder: "Select your date",
-      required: true,
-      column: { xs: 12, sm: 12, md: 6, lg: 6 },
-    },
     {
       name: "name",
       label: "Name",
@@ -80,7 +75,6 @@ const MemberCreateUpdate = ({ modal, setModal, defaultValues }) => {
    * handle form submission
    */
   const onSubmit = (formData) => {
-    formData.month = new Date(formData?.month)?.toISOString();
     formData.depositAmount = 0;
     formData.mealQuantity = 0;
     formData.mealRate = 0;
@@ -95,6 +89,9 @@ const MemberCreateUpdate = ({ modal, setModal, defaultValues }) => {
         modal={modal}
         setModal={setModal}
         inputFields={inputFields}
+        isLoading={isLoading}
+        isSuccess={isSuccess}
+        emptyDefaultValue={emptyDefaultValue}
         size={"xl"}
         title={"Create Member"}
         addTitle={"Add Member"}

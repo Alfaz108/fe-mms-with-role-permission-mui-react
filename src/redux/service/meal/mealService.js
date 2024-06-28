@@ -1,31 +1,26 @@
 import { apiService } from "../../api/apiService";
 
-export const memberService = apiService.injectEndpoints({
+export const mealService = apiService.injectEndpoints({
   endpoints: (builder) => ({
-    memberList: builder.query({
+    mealList: builder.query({
       query: (url) => ({
-        url: `/member${url}`,
+        url: `/meal${url}`,
         method: "GET",
       }),
       transformResponse: ({ data }) => data || [],
     }),
 
-    memberDropdown: builder.query({
+    activeMealList: builder.query({
       query: () => ({
-        url: `/member`,
+        url: `/meal/active`,
         method: "GET",
       }),
-      transformResponse: ({ data }) =>
-        data?.data?.map((member) => {
-          return {
-            label: member.name,
-            value: member._id,
-          };
-        }),
+      transformResponse: ({ data }) => data || [],
     }),
-    memberCreate: builder.mutation({
+
+    mealCreate: builder.mutation({
       query: ({ postBody }) => ({
-        url: `member`,
+        url: `/meal`,
         method: "POST",
         body: postBody,
       }),
@@ -52,7 +47,7 @@ export const memberService = apiService.injectEndpoints({
 });
 
 export const {
-  useMemberListQuery,
-  useMemberCreateMutation,
-  useMemberDropdownQuery,
-} = memberService;
+  useMealListQuery,
+  useMealCreateMutation,
+  useActiveMealListQuery,
+} = mealService;

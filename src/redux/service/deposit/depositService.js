@@ -1,31 +1,18 @@
 import { apiService } from "../../api/apiService";
 
-export const memberService = apiService.injectEndpoints({
+export const depositService = apiService.injectEndpoints({
   endpoints: (builder) => ({
-    memberList: builder.query({
+    depositList: builder.query({
       query: (url) => ({
-        url: `/member${url}`,
+        url: `/deposit${url}`,
         method: "GET",
       }),
       transformResponse: ({ data }) => data || [],
     }),
 
-    memberDropdown: builder.query({
-      query: () => ({
-        url: `/member`,
-        method: "GET",
-      }),
-      transformResponse: ({ data }) =>
-        data?.data?.map((member) => {
-          return {
-            label: member.name,
-            value: member._id,
-          };
-        }),
-    }),
-    memberCreate: builder.mutation({
+    depositCreate: builder.mutation({
       query: ({ postBody }) => ({
-        url: `member`,
+        url: `/deposit`,
         method: "POST",
         body: postBody,
       }),
@@ -51,8 +38,4 @@ export const memberService = apiService.injectEndpoints({
   }),
 });
 
-export const {
-  useMemberListQuery,
-  useMemberCreateMutation,
-  useMemberDropdownQuery,
-} = memberService;
+export const { useDepositListQuery, useDepositCreateMutation } = depositService;

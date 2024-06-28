@@ -2,13 +2,13 @@
 import React, { useMemo, useState } from "react";
 
 //@ MUI lib import
-import { TableCell } from "@mui/material";
 
 //@ component import
 import CustomTable from "../../../../components/app/table";
 
-//@ util function
+//@ helper and util function
 import DateFormatter from "../../../../utils/date-time/DateFormatter";
+import { getURL } from "../../../../helpers/qs";
 
 //@ rtk api services & features
 import { useAdminMemberListQuery } from "../../../../redux/service/admin/adminMemberService";
@@ -35,12 +35,30 @@ const AdminMember = () => {
   const [modal, setModal] = useState(false);
   const [defaultValues, setDefaultValues] = useState(DEFAULT_MEMBER_VALUES);
 
-  const { data: memberList, isLoading, isError } = useAdminMemberListQuery();
+  /**
+   *   rtk mutation & Query
+   */
 
-  const renderTableData = useMemo(
-    () => memberList?.data || [],
-    [memberList?.data]
-  );
+  //@ member list
+  const { memberList, isLoading, pagination, isError } =
+    useAdminMemberListQuery(getURL(``), {
+      selectFromResult: (data) => {
+        console.log(data);
+        return {
+          pagination: data?.data?.pagination,
+          memberList: data?.data?.data,
+          isLoading: data?.isLoading,
+          isError: data?.isError,
+        };
+      },
+    });
+
+  /**
+   * Show the modal
+   */
+  const addShowModal = () => {
+    setModal(true);
+  };
 
   /**
    * table columns
@@ -88,11 +106,9 @@ const AdminMember = () => {
   );
 
   /**
-   * Show the modal
+   * table columns
    */
-  const addShowModal = () => {
-    setModal(true);
-  };
+  const renderTableData = useMemo(() => memberList || [], [memberList]);
 
   if (isLoading) {
     return <></>;
@@ -108,6 +124,7 @@ const AdminMember = () => {
           tableInfo={{
             addTitle: "Member",
           }}
+          paginationInfo={pagination}
         />
 
         <MemberCreateUpdate
@@ -115,6 +132,7 @@ const AdminMember = () => {
             modal,
             setModal,
             defaultValues,
+            emptyDefaultValue: DEFAULT_MEMBER_VALUES,
           }}
         />
       </>

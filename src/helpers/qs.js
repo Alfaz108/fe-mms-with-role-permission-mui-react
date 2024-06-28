@@ -7,9 +7,6 @@ export const getURL = (route) => {
 
   const { page, limit } = useSelector((state) => state.pagination);
 
-  console.log({ page });
-  console.log({ limit });
-
   let URL = `${route}`;
   if (page) URL += `?page=${page}`;
   if (limit) URL += `&limit=${limit}`;

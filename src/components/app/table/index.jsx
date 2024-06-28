@@ -16,7 +16,11 @@ import { Button, Box } from "@mui/material";
 import NoData from "../../common/NodataPage";
 import Pagination from "./Pagination";
 
+//@ main component
 const CustomTable = (props) => {
+  /**
+   *   all props declare
+   */
   const data = props["data"] || [];
   const columns = props["columns"] || [];
   const hideBtn = props["hideBtn"] || false;
@@ -25,14 +29,18 @@ const CustomTable = (props) => {
   const addShowModal = props["addShowModal"];
   const paginationInfo = props["paginationInfo"] || {};
 
+  /**
+   *  data transform for table
+   */
   function createData(data, columns) {
-    const rowData = {};
+    const rowData = { _id: data?._id };
     columns?.forEach((column) => {
-      rowData[column?.id] = data[column?.id];
+      if (column?.id !== "action") {
+        rowData[column?.id] = data[column?.id];
+      }
     });
     return rowData;
   }
-
   const rows = data?.map((data) => createData(data, columns));
 
   return (
@@ -96,7 +104,11 @@ const CustomTable = (props) => {
                     const value = row[column.id];
                     return (
                       <TableCell key={column.id} align={column.align}>
-                        {column.format ? column.format(value) : value}
+                        {column.renderCell
+                          ? column.renderCell({ value, row })
+                          : column.format
+                          ? column.format(value)
+                          : value}
                       </TableCell>
                     );
                   })}
@@ -107,6 +119,9 @@ const CustomTable = (props) => {
         </Table>
       </TableContainer>
 
+      {/**
+       * pagination
+       */}
       {paginationInfo && <Pagination paginationInfo={paginationInfo} />}
     </Paper>
   );

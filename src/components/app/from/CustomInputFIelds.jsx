@@ -17,6 +17,7 @@ import {
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import dayjs from "dayjs";
 
 //@ main Component
 const CustomInputFields = ({ inputField, column }) => {
@@ -27,6 +28,10 @@ const CustomInputFields = ({ inputField, column }) => {
     control,
     formState: { errors },
   } = useFormContext();
+
+  // const defaultDate = inputField.defaultValue
+  //   ? dayjs(inputField.defaultValue).toDate()
+  //   : null;
 
   if (inputField.type === "select") {
     return (
@@ -58,16 +63,16 @@ const CustomInputFields = ({ inputField, column }) => {
                   }
                   error={!!errors[field.name]}
                 >
-                  {inputField.options.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>
-                      {option.label}
+                  {inputField?.options?.map((option) => (
+                    <MenuItem key={option?.value} value={option?.value}>
+                      {option?.label}
                     </MenuItem>
                   ))}
                 </Select>
 
                 {fieldState.error?.message && (
                   <FormHelperText error>
-                    {fieldState.error?.message}inputField
+                    {fieldState.error?.message}
                   </FormHelperText>
                 )}
               </>
@@ -81,44 +86,58 @@ const CustomInputFields = ({ inputField, column }) => {
       <Grid item {...column}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <Controller
-            name={inputField.name}
+            key={inputField.id}
             control={control}
-            defaultValue={null}
-            render={({ field }) => (
-              <>
-                <DatePicker
-                  {...field}
-                  label={
-                    <>
-                      {inputField.label}
-                      {inputField.required && (
-                        <span style={{ color: "red" }}>*</span>
-                      )}
-                    </>
-                  }
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      fullWidth
-                      error={!!errors[field.name]}
-                      helperText={errors[field.name]?.message || ""}
-                    />
+            name={inputField.name}
+            render={({ field, fieldState: { error } }) => {
+              return (
+                <>
+                  <DatePicker
+                    format={inputField.dateFormat || "MMMM DD, YYYY"}
+                    value={dayjs(field.value)}
+                    inputRef={field.ref}
+                    disabled={inputField.disabled}
+                    onChange={(date) =>
+                      inputField.extraOnchange
+                        ? inputField.extraOnchange(dayjs(date).toISOString())
+                        : field.onChange(dayjs(date).toISOString())
+                    }
+                    minDate={
+                      inputField.minDate ? dayjs(inputField.minDate) : null
+                    }
+                    maxDate={inputField.maxDate ? dayjs(new Date()) : null}
+                    label={
+                      <>
+                        {inputField.label}
+                        {inputField.required && (
+                          <span style={{ color: "red" }}>*</span>
+                        )}
+                      </>
+                    }
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        fullWidth
+                        error={!!errors[field.name]}
+                        helperText={errors[field.name]?.message || ""}
+                      />
+                    )}
+                    slotProps={{
+                      textField: {
+                        fullWidth: true,
+                        error: Boolean(error),
+                        size: inputField.size,
+                      },
+                    }}
+                  />
+                  {Boolean(error) && (
+                    <FormHelperText error id={inputField?.id}>
+                      {error?.message}
+                    </FormHelperText>
                   )}
-                  slotProps={{
-                    textField: {
-                      fullWidth: true,
-                      error: Boolean(errors[field.name]),
-                      size: inputField.size,
-                    },
-                  }}
-                />
-                {Boolean(errors[field.name]) && (
-                  <FormHelperText error id={inputField.id}>
-                    {errors[field.name]?.message}
-                  </FormHelperText>
-                )}
-              </>
-            )}
+                </>
+              );
+            }}
           />
         </LocalizationProvider>
       </Grid>
@@ -130,7 +149,7 @@ const CustomInputFields = ({ inputField, column }) => {
           name={inputField.name}
           control={control}
           defaultValue=""
-          render={({ field }) => (
+          render={({ field, fieldState: { error } }) => (
             <Box>
               <TextField
                 {...field}
@@ -147,9 +166,12 @@ const CustomInputFields = ({ inputField, column }) => {
                     )}
                   </>
                 }
-                error={!!errors[field.name]}
-                helperText={errors[field.name]?.message || ""}
               />
+              {Boolean(error) && (
+                <FormHelperText error id={inputField?.id}>
+                  {error?.message}
+                </FormHelperText>
+              )}
             </Box>
           )}
         />
