@@ -5,6 +5,7 @@ import DashboardIcon from "@mui/icons-material/Dashboard";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import ShoppingBagSharpIcon from "@mui/icons-material/ShoppingBagSharp";
 import RestaurantIcon from "@mui/icons-material/Restaurant";
+import SummarizeIcon from "@mui/icons-material/Summarize";
 
 const MENU_ITEMS = () => {
   return [
@@ -52,6 +53,13 @@ const MENU_ITEMS = () => {
       label: "Meal",
       icon: RestaurantIcon,
       url: "/meal",
+      role: [PermissionEnum.MANAGER],
+    },
+    {
+      key: "summary",
+      label: "Summary",
+      icon: SummarizeIcon,
+      url: "/summary",
       role: [PermissionEnum.MANAGER],
     },
   ];

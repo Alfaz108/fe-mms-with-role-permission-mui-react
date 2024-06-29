@@ -5,6 +5,7 @@ import Deposit from "../pages/private/deposit";
 import Market from "../pages/private/market";
 import Meal from "../pages/private/meal";
 import Member from "../pages/private/member";
+import Summary from "../pages/private/summary";
 
 const privateRoutes = [
   {
@@ -40,6 +41,11 @@ const privateRoutes = [
   {
     path: "/meal",
     element: <Meal />,
+    routePermission: [PermissionEnum.MANAGER],
+  },
+  {
+    path: "/summary",
+    element: <Summary />,
     routePermission: [PermissionEnum.MANAGER],
   },
 ];

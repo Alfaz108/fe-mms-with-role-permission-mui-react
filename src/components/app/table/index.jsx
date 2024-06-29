@@ -67,7 +67,7 @@ const CustomTable = (props) => {
         </Button>
       )}
 
-      <TableContainer sx={{ maxHeight: 440 }}>
+      <TableContainer sx={{ maxHeight: 403 }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>

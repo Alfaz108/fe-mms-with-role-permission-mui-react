@@ -25,6 +25,7 @@ import { useMemberDropdownQuery } from "../../../redux/service/member/memberServ
 const DEFAULT_DEPOSIT_VALUES = {
   member: "",
   depositAmount: 0,
+  depositDate: new Date(),
 };
 
 //@ main component
@@ -92,7 +93,8 @@ const Deposit = () => {
     return (
       <>
         <IconButton color="primary">
-          <SaveAsSharpIcon onClick={edit} />
+          {/* onClick={edit} */}
+          <SaveAsSharpIcon />
         </IconButton>
         <IconButton sx={{ color: "black" }}>
           <DeleteIcon />

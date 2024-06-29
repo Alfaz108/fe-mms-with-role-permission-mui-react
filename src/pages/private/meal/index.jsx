@@ -95,7 +95,8 @@ const Meal = () => {
     return (
       <>
         <IconButton color="primary">
-          <SaveAsSharpIcon onClick={edit} />
+          {/* onClick={edit} */}
+          <SaveAsSharpIcon />
         </IconButton>
         <IconButton sx={{ color: "black" }}>
           <DeleteIcon />

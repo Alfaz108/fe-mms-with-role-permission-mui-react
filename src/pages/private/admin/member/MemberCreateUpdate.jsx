@@ -75,11 +75,6 @@ const MemberCreateUpdate = ({
    * handle form submission
    */
   const onSubmit = (formData) => {
-    formData.depositAmount = 0;
-    formData.mealQuantity = 0;
-    formData.mealRate = 0;
-    formData.totalCost = 0;
-    formData.summaryAmount = 0;
     memberCreate({ postBody: formData });
   };
 

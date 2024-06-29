@@ -20,11 +20,6 @@ const DEFAULT_MEMBER_VALUES = {
   mobile: "",
   roomNumber: "",
   status: "ACTIVE",
-  depositAmount: 0,
-  mealQuantity: 0,
-  mealRate: 0,
-  totalCost: 0,
-  summaryAmount: 0,
 };
 
 //@ main component

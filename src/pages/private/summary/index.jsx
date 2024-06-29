@@ -11,10 +11,12 @@ import { StatusChangeColor } from "../../../utils/status-change/StatusChangeColo
 import { getURL } from "../../../helpers/qs";
 
 //@ rtk api services & features
-import { useMemberListQuery } from "../../../redux/service/member/memberService";
+import { useSummaryListQuery } from "../../../redux/service/summary/summaryService";
+import { useMemberDropdownQuery } from "../../../redux/service/member/memberService";
+import { convertDropdownDataToObjKey } from "../../../helpers/array-object/convertArrToObjKey";
 
 //@ main component
-const Member = () => {
+const Summary = () => {
   /**
    * react local state
    */
@@ -25,15 +27,23 @@ const Member = () => {
    *   rtk mutation & Query
    */
 
-  //@ member list
-  const { memberList, isLoading, pagination, isError } = useMemberListQuery(
+  //@ member dropdown
+  const { memberDropdown } = useMemberDropdownQuery(undefined, {
+    selectFromResult: ({ data }) => {
+      const memberDropdown = convertDropdownDataToObjKey(data);
+      return { memberDropdown };
+    },
+  });
+
+  //@ summary list
+  const { summaryList, isLoading, pagination, isError } = useSummaryListQuery(
     getURL(``),
     {
       selectFromResult: (data) => {
         console.log(data);
         return {
           pagination: data?.data?.pagination,
-          memberList: data?.data?.data,
+          summaryList: data?.data?.data,
           isLoading: data?.isLoading,
           isError: data?.isError,
         };
@@ -47,42 +57,56 @@ const Member = () => {
   const columns = useMemo(
     () => [
       {
-        id: "name",
-        label: "Name",
-        minWidth: 120,
-        format: (value) => (value ? value : "n/a"),
-        align: "center",
-      },
-      {
-        id: "mobile",
-        label: "Mobile",
-        minWidth: 120,
-        format: (value) => (value ? value : "n/a"),
-        align: "center",
-      },
-      {
-        id: "roomNumber",
-        label: "Room Number",
+        id: "member",
+        label: "Member Name",
         minWidth: 50,
-        format: (value) => (value ? value : "n/a"),
+        format: (value) => (value ? memberDropdown?.[value] : "n/a"),
         align: "center",
       },
       {
-        id: "status",
-        label: "Status",
+        id: "mealRate",
+        label: "Meal Rate",
+        minWidth: 120,
+        format: (value) => (value ? value : 0),
+        align: "center",
+      },
+      {
+        id: "mealQuantity",
+        label: "Meal Quantity",
         minWidth: 50,
-        format: (value) => <StatusChangeColor value={value} />,
+        format: (value) => (value ? value : 0),
+        align: "center",
+      },
+      {
+        id: "depositAmount",
+        label: "Deposit Amount",
+        minWidth: 50,
+        format: (value) => (value ? value : 0),
+        align: "center",
+      },
+      {
+        id: "totalCost",
+        label: "Total Cost",
+        minWidth: 50,
+        format: (value) => (value ? value : 0),
+        align: "center",
+      },
+      {
+        id: "summaryAmount",
+        label: "Summary Amount",
+        minWidth: 50,
+        format: (value) => (value ? value : 0),
         align: "center",
       },
     ],
-    []
+    [memberDropdown]
   );
 
   /**
    *   table data render
    */
 
-  const renderTableData = useMemo(() => memberList || [], [memberList]);
+  const renderTableData = useMemo(() => summaryList || [], [summaryList]);
 
   if (isLoading) {
     return (
@@ -103,9 +127,6 @@ const Member = () => {
           columns={columns}
           data={renderTableData}
           hideBtn={true}
-          tableInfo={{
-            addTitle: "Member",
-          }}
           paginationInfo={pagination}
         />
       </>
@@ -113,4 +134,4 @@ const Member = () => {
   }
 };
 
-export default Member;
+export default Summary;
