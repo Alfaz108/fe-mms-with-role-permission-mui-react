@@ -22,6 +22,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { userLogout } from "../redux/features/authReducer";
 
 const drawerWidth = 240;
+const closeDrawerWidth = 64;
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -78,6 +79,14 @@ const AppBar = styled(MuiAppBar, {
       duration: theme.transitions.duration.enteringScreen,
     }),
   }),
+  ...(!open && {
+    marginLeft: closeDrawerWidth,
+    width: `calc(100% - ${closeDrawerWidth}px)`,
+    transition: theme.transitions.create(["width", "margin"], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  }),
 }));
 
 const Navbar = ({ open, setOpen }) => {
@@ -107,8 +116,8 @@ const Navbar = ({ open, setOpen }) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
-  const handleDrawerOpen = () => {
-    setOpen(true);
+  const toggleDrawer = () => {
+    setOpen(!open);
   };
 
   const handleLogout = () => {
@@ -200,13 +209,12 @@ const Navbar = ({ open, setOpen }) => {
       <Toolbar>
         <IconButton
           color="inherit"
-          aria-label="open drawer"
-          onClick={handleDrawerOpen}
+          aria-label="toggle drawer"
+          onClick={toggleDrawer}
           edge="start"
-          sx={{
-            marginRight: 5,
-            ...(open && { display: "none" }),
-          }}
+          // sx={{
+          //   marginRight: open ? 0 : 5, // Apply margin only when open is true
+          // }}
         >
           <MenuIcon />
         </IconButton>
@@ -244,7 +252,7 @@ const Navbar = ({ open, setOpen }) => {
                 </Box>
               </IconButton>
             </Box>
-            <Box sx={{ display: { xs: "flex", md: "none" } }}>
+            <Box sx={{ display: { xs: "flex", md: "none" }, padding: "6px" }}>
               <IconButton
                 size="large"
                 aria-label="show more"

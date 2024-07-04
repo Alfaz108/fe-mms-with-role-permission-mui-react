@@ -14,6 +14,7 @@ import { getURL } from "../../../helpers/qs";
 import { useSummaryListQuery } from "../../../redux/service/summary/summaryService";
 import { useMemberDropdownQuery } from "../../../redux/service/member/memberService";
 import { convertDropdownDataToObjKey } from "../../../helpers/array-object/convertArrToObjKey";
+import formatNumber from "../../../helpers/numberFormater";
 
 //@ main component
 const Summary = () => {
@@ -67,7 +68,7 @@ const Summary = () => {
         id: "mealRate",
         label: "Meal Rate",
         minWidth: 120,
-        format: (value) => (value ? value : 0),
+        format: (value) => (value ? formatNumber(value) : 0),
         align: "center",
       },
       {
@@ -88,14 +89,14 @@ const Summary = () => {
         id: "totalCost",
         label: "Total Cost",
         minWidth: 50,
-        format: (value) => (value ? value : 0),
+        format: (value) => (value ? formatNumber(value) : 0),
         align: "center",
       },
       {
         id: "summaryAmount",
         label: "Summary Amount",
         minWidth: 50,
-        format: (value) => (value ? value : 0),
+        format: (value) => (value ? formatNumber(value) : 0),
         align: "center",
       },
     ],

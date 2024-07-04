@@ -2,9 +2,9 @@ import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import Navbar from "./Navbar";
-import LeftSidebar from "./LeftSidebar";
 import { useState } from "react";
 import { Outlet } from "react-router-dom";
+import LeftSidebar from "./LeftSidebar";
 
 const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",

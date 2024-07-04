@@ -11,10 +11,12 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import { Typography } from "@mui/material";
+import { Avatar, Typography } from "@mui/material";
 import { Link, useLocation } from "react-router-dom";
 import MENU_ITEMS from "../constants/menu";
 import { useSelector } from "react-redux";
+import MenuIcon from "@mui/icons-material/Menu";
+import logo from "../assets/image/logo.png";
 
 const drawerWidth = 240;
 
@@ -33,9 +35,9 @@ const closedMixin = (theme) => ({
     duration: theme.transitions.duration.leavingScreen,
   }),
   overflowX: "hidden",
-  width: `calc(${theme.spacing(7)} + 1px)`,
+  width: `calc(${theme.spacing(7)} + 7px)`,
   [theme.breakpoints.up("sm")]: {
-    width: `calc(${theme.spacing(8)} + 1px)`,
+    width: `calc(${theme.spacing(7)} + 7px)`,
   },
 });
 
@@ -110,16 +112,17 @@ const LeftSidebar = ({ open, setOpen }) => {
 
   return (
     <Drawer variant="permanent" open={open} sx={{ boxShadow: 2 }}>
-      <DrawerHeader>
+      <DrawerHeader
+        sx={{
+          backgroundColor: "#f5f5f5", // Adjust background color if needed
+        }}
+      >
+        <Avatar src={logo} alt="Logo" sx={{ width: 60, height: 60 }} />
+        <Typography variant="h9" sx={{ fontWeight: "bold", color: "#333" }}>
+          DISH DASH
+        </Typography>
         <Box></Box>
-        <Typography variant="h7">MEAL MANAGEMENT</Typography>
-        <IconButton onClick={handleDrawerClose}>
-          {theme.direction === "rtl" ? (
-            <ChevronRightIcon />
-          ) : (
-            <ChevronLeftIcon />
-          )}
-        </IconButton>
+        <Box></Box>
       </DrawerHeader>
       <Divider />
       <List>
