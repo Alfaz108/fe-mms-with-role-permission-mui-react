@@ -8,6 +8,7 @@ const getBearerToken = () => {
 const baseQuery = fetchBaseQuery({
   baseUrl: baseURL,
   prepareHeaders: (headers) => {
+    headers.set("Content-Type", "application/json");
     const token = getBearerToken();
     if (token) {
       headers.set("Authorization", `Bearer ${token}`);
