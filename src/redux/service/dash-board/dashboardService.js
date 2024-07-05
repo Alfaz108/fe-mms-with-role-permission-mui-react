@@ -9,7 +9,15 @@ export const dashboardService = apiService.injectEndpoints({
       }),
       transformResponse: ({ data }) => data || [],
     }),
+    adminDashboardData: builder.query({
+      query: () => ({
+        url: `/dash-board/admin`,
+        method: "GET",
+      }),
+      transformResponse: ({ data }) => data || [],
+    }),
   }),
 });
 
-export const { useDashboardDataQuery } = dashboardService;
+export const { useDashboardDataQuery, useAdminDashboardDataQuery } =
+  dashboardService;

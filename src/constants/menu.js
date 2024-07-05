@@ -15,9 +15,9 @@ const MENU_ITEMS = () => {
       icon: DashboardIcon,
       url: "/",
       role: [
-        PermissionEnum.ADMIN,
         PermissionEnum.MANAGER,
         PermissionEnum.MEMBER,
+        PermissionEnum.ADMIN,
       ],
     },
     {

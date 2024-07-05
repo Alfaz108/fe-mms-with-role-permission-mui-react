@@ -1,22 +1,23 @@
 import { PermissionEnum } from "../constants/enums/permission.enums";
 import AdminMember from "../pages/private/admin/member";
-import Dashboard from "../pages/private/dashboard";
 import Deposit from "../pages/private/deposit";
 import Market from "../pages/private/market";
 import Meal from "../pages/private/meal";
 import Member from "../pages/private/member";
 import Summary from "../pages/private/summary";
+import Dashboard from "../pages/private/dashboard/index";
 
 const privateRoutes = [
   {
     path: "/",
     element: <Dashboard />,
     routePermission: [
-      PermissionEnum.ADMIN,
       PermissionEnum.MANAGER,
       PermissionEnum.MEMBER,
+      PermissionEnum.ADMIN,
     ],
   },
+
   {
     path: "/admin/member",
     element: <AdminMember />,
