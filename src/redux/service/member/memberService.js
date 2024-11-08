@@ -16,7 +16,7 @@ export const memberService = apiService.injectEndpoints({
         method: "GET",
       }),
       transformResponse: ({ data }) =>
-        data?.data?.map((member) => {
+        data?.map((member) => {
           return {
             label: member.name,
             value: member._id,
