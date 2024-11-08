@@ -39,7 +39,6 @@ const validationSchema = yup
           mealQuantity: yup
             .number()
             .required("please enter meal quantity")
-            .min(0.001, "Meal quantity must be greater than 0")
             .typeError("meal quantity must be a number"),
         })
       )
