@@ -12,7 +12,7 @@ export const memberService = apiService.injectEndpoints({
 
     memberDropdown: builder.query({
       query: () => ({
-        url: `/member`,
+        url: `/member/dropdown`,
         method: "GET",
       }),
       transformResponse: ({ data }) =>
